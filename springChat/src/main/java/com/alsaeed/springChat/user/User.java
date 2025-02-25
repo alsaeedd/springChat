@@ -2,10 +2,7 @@ package com.alsaeed.springChat.user;
 
 import com.alsaeed.springChat.chat.Chat;
 import com.alsaeed.springChat.common.BaseAuditingEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,7 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseAuditingEntity {
 
+    private static final int LAST_ACTIVE_INTERVAL = 5;
     @Id
     private String id;
     private String firstName;
@@ -33,6 +31,11 @@ public class User extends BaseAuditingEntity {
     private List<Chat> chatAsSender;
     @OneToMany(mappedBy = "receiver")
     private List<Chat> chatAsReceiver;
+
+    @Transient
+    public boolean isUserOnline(){
+        return lastSeen != null && lastSeen.isAfter(LocalDateTime.now().minusMinutes(LAST_ACTIVE_INTERVAL));
+    }
 
 
 }
