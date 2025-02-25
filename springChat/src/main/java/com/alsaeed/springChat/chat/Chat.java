@@ -3,10 +3,7 @@ package com.alsaeed.springChat.chat;
 import com.alsaeed.springChat.common.BaseAuditingEntity;
 import com.alsaeed.springChat.message.Message;
 import com.alsaeed.springChat.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +25,13 @@ public class Chat extends BaseAuditingEntity {
     @GeneratedValue(strategy = UUID)
     private String id;
 
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
     private User sender;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
     private User receiver;
-    private List<Message> messages; //because lists preserver order
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
+    @OrderBy("createdDate DESC")
+    private List<Message> messages; //because lists preserve order
 }

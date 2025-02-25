@@ -1,5 +1,6 @@
 package com.alsaeed.springChat.message;
 
+import com.alsaeed.springChat.chat.Chat;
 import com.alsaeed.springChat.common.BaseAuditingEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,9 @@ public class Message extends BaseAuditingEntity {
     private MessageState state;
     @Enumerated(EnumType.STRING)
     private MessageType type;
+    @ManyToOne()
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
     @Column(name = "sender_id", nullable = false)
     private String senderId;

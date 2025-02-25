@@ -1,8 +1,10 @@
 package com.alsaeed.springChat.user;
 
+import com.alsaeed.springChat.chat.Chat;
 import com.alsaeed.springChat.common.BaseAuditingEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,6 +28,11 @@ public class User extends BaseAuditingEntity {
     private String lastName;
     private String email;
     private LocalDateTime lastSeen;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Chat> chatAsSender;
+    @OneToMany(mappedBy = "receiver")
+    private List<Chat> chatAsReceiver;
 
 
 }
