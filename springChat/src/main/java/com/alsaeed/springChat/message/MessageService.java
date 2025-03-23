@@ -49,7 +49,7 @@ public class MessageService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new EntityNotFoundException("Chat Not Found"));
 
-        final String receiverId = getReceiverId(chat, authentication);
+//        final String receiverId = getReceiverId(chat, authentication);
 
         messageRepository.setMessagesToSeenByChatId(chatId, MessageState.SEEN);
 
