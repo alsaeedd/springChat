@@ -21,7 +21,8 @@ public class ChatController {
             @RequestParam(name = "receiver-id") String receiverId
     ){
         final String chatId = chatService.createChat(senderId, receiverId);
-        StringResponse stringResponse = new StringResponse()
+        new StringResponse();
+        StringResponse stringResponse = StringResponse
                 .builder()
                 .response(chatId)
                 .build();
