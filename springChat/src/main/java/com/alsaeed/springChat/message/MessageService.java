@@ -13,6 +13,7 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
+    private final MessageMapper mapper;
 
     public void saveMessage(MessageRequest messageRequest){
         Chat chat = chatRepository.findById(messageRequest.getChatId())
@@ -32,6 +33,9 @@ public class MessageService {
     }
 
     public List<MessageResponse> findChatMessages(String chatId){
-
+        return messageRepository.findMessagesByChatId(chatId)
+                .stream()
+                .map(mapper::toMessageResponse)
+                .toList();
     }
 }
