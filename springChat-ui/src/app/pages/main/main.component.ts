@@ -16,6 +16,7 @@ import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-main',
+  standalone: true,
   imports: [
     ChatListComponent,
     DatePipe,
@@ -159,7 +160,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private setMessagesToSeen() {
-    this.messageService.setMessageToSeen({
+    this.messageService.setMessagesToSeen({
       'chat-id': this.selectedChat.id as string
     }).subscribe({
       next: () => {
@@ -177,7 +178,7 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private getAllChatMessages(chatId: string) {
-    this.messageService.getAllMessages({
+    this.messageService.getMessages({
       'chat-id': chatId
     }).subscribe({
       next: (messages) => {
@@ -188,8 +189,8 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private initWebSocket() {
     if (this.keycloakService.keycloak.tokenParsed?.sub) {
-      let ws = new SockJS('http://localhost:8080/ws');
-      this.socketClient = Stomp.over(ws);
+      let websocket = new SockJS('http://localhost:8080/websocket');
+      this.socketClient = Stomp.over(websocket);
       const subUrl = `/user/${this.keycloakService.keycloak.tokenParsed?.sub}/chat`;
       this.socketClient.connect({'Authorization': 'Bearer ' + this.keycloakService.keycloak.token},
         () => {

@@ -47,7 +47,7 @@ export class ChatListComponent {
         const chat: ChatResponse = {
           id: res.response,
           name: contact.firstName + ' ' + contact.lastName,
-          recipientOnline: contact.online,
+          receiverOnline: contact.online,
           lastMessageTime: contact.lastSeen,
           senderId: this.keycloakService.userId,
           receiverId: contact.id

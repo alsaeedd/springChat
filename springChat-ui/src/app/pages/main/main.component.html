@@ -30,7 +30,7 @@
                   <div class="d-flex flex-column">
                     <span>{{ selectedChat.name }}</span>
                     <div class="d-flex gap-1 align-items-center">
-                      @if (selectedChat.recipientOnline) {
+                      @if (selectedChat.receiverOnline) {
                         <small class="online-status"></small>
                         <small>Online</small>
                       } @else {
@@ -121,7 +121,7 @@
       } @else {
         <div class="d-flex flex-column justify-content-center align-items-center h-100 w-100 bg-chat ">
           <img width="300" src="wa_banner.png" alt="">
-          <h2 class="text-black-50">WhatsApp Clone Application By Alibou</h2>
+          <h2 class="text-black-50">SpringChat (WA Clone)</h2>
           <p class="text-black-50"></p>
         </div>
       }

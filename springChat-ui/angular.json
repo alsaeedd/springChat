@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "whatsapp-clone-ui": {
+    "springChat-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,12 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/whatsapp-clone-ui",
+            "outputPath": "dist/spring-chat-ui",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js",
-              "src/window-global-fix.ts"
+              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -65,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "whatsapp-clone-ui:build:production"
+              "buildTarget": "springChat-ui:build:production"
             },
             "development": {
-              "buildTarget": "whatsapp-clone-ui:build:development"
+              "buildTarget": "springChat-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -99,8 +98,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }
