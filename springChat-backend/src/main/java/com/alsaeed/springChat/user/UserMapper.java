@@ -23,6 +23,10 @@ public class UserMapper {
             user.setFirstName(attributes.get("nickname").toString());
         }
 
+        if (attributes.containsKey("family_name")) {
+            user.setLastName(attributes.get("family_name").toString());
+        }
+
         if(attributes.containsKey("email")){
             user.setEmail(attributes.get("email").toString());
         }
