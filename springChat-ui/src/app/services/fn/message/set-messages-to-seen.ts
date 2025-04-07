@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface SetMessageToSeen$Params {
+export interface SetMessagesToSeen$Params {
   'chat-id': string;
 }
 
-export function setMessageToSeen(http: HttpClient, rootUrl: string, params: SetMessageToSeen$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, setMessageToSeen.PATH, 'patch');
+export function setMessagesToSeen(http: HttpClient, rootUrl: string, params: SetMessagesToSeen$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, setMessagesToSeen.PATH, 'patch');
   if (params) {
     rb.query('chat-id', params['chat-id'], {});
   }
@@ -29,4 +29,4 @@ export function setMessageToSeen(http: HttpClient, rootUrl: string, params: SetM
   );
 }
 
-setMessageToSeen.PATH = '/api/v1/messages';
+setMessagesToSeen.PATH = '/api/v1/messages';

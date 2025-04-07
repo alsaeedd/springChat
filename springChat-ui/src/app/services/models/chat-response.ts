@@ -8,7 +8,7 @@ export interface ChatResponse {
   lastMessageTime?: string;
   name?: string;
   receiverId?: string;
-  recipientOnline?: boolean;
+  receiverOnline?: boolean;
   senderId?: string;
   unreadCount?: number;
 }
