@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${RDS_ENDPOINT}/springChat
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${EC2_IP}:9090/realms/springChat
+  
+application:
+  file:
+    uploads:
+      media-output-path: ./uploads
+
+# Configure S3 for file storage
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: us-east-1
+    s3:
+      bucket: ${S3_BUCKET_NAME}

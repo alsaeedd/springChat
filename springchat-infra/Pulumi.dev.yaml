@@ -1,0 +1,10 @@
+config:
+  aws:region: us-east-1
+  springChat:dbUsername: username
+  springChat:dbPassword:
+    secure: AAABAHXG7HVIUvJd5kd4S8pOVku2yliPbSOKx1eByIm5F165GLAJgRS4wOY=
+  springChat:keycloakAdminUser: admin
+  springChat:keycloakAdminPassword:
+    secure: AAABAJ7bbScZgVYntsJ7r10GX0wyCYqVGvPevr5jLYRhJQv8hw==
+  springChat:environment: dev
+  springChat:projectName: springchat
