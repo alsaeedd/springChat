@@ -1,0 +1,9 @@
+config:
+  aws:region: us-east-1
+  springchat:dbUsername: username
+  springchat:dbPassword:
+    secure: AAABAJYourEncryptedPasswordStringWillBeHere=
+  springchat:environment: dev
+  springchat:projectName: springchat
+  springchat:keyPairName: springchat-key-pair
+  springChat:dbPassword: password

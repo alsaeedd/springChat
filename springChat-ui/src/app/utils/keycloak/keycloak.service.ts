@@ -17,7 +17,7 @@ export class KeycloakService {
   get keycloak() {
     if (!this._keycloak) {
       this._keycloak = new Keycloak({
-        url: 'http://localhost:9090',
+        url: 'https://54.81.141.235:9090',
         realm: 'springChat',
         clientId: 'springChat-app'
       });
@@ -28,8 +28,8 @@ export class KeycloakService {
   async init() {
     const authenticated = await this.keycloak.init({
       onLoad: 'login-required',
-      // silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`,
-      // checkLoginIframe: false
+      checkLoginIframe: false, // Disable iframe check that causes timeout
+      redirectUri: window.location.origin // Use current site URL for redirect
     });
   }
 

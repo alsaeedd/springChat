@@ -21,8 +21,10 @@
     "@angular/router": "^19.0.0",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@stomp/stompjs": "^7.1.1",
     "bootstrap": "^5.3.3",
     "keycloak-js": "^26.0.7",
+    "net": "^1.0.2",
     "ng-openapi-gen": "^0.52.0",
     "quill": "^2.0.3",
     "rxjs": "~7.8.0",
@@ -45,5 +47,11 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.6.2"
+  },
+  "browser": {
+    "http": false,
+    "https": false,
+    "url": false,
+    "util": false
   }
 }
