@@ -68,6 +68,9 @@ The project utilizes AWS cloud infrastructure for scalable and secure deployment
 - Automated infrastructure provisioning
 - Secure network configuration with VPC and security groups
 
+##### Note
+- I've taken down all AWS resources for security purposes and to avoid being charged. 
+
 ## Security
 
 This application implements security best practices:
@@ -83,6 +86,12 @@ This application implements security best practices:
 - Voice and video calling
 - Group chat functionality
 - Message search
+
+## Future Enhancements to AWS Architecture
+
+- Include user data startup script on EC2 to automatically start the backend and create self-signed certificates for HTTPS usage
+- Refine docker-compose file to include essentials and tighten security with Keycloak
+- This entire architecture could be redone if cost was instroduced, utilizing Fargate and ECS along with networking changes such as using private subnets to enhance security
 
 ## Contributing
 
