@@ -14,6 +14,23 @@ application:
     uploads:
       media-output-path: ./uploads
 
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: springChat
+
+  management:
+    server:
+      port: 8080
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+
 # Configure S3 for file storage
 cloud:
   aws:

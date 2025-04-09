@@ -189,7 +189,10 @@ export class MainComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private initWebSocket() {
     if (this.keycloakService.keycloak.tokenParsed?.sub) {
-      let websocket = new SockJS('http://localhost:8080/websocket');
+      const serverUrl = window.location.protocol === 'https:' ? 
+      'https://54.81.141.235:8443' : 'http://54.81.141.235:8080';
+    
+      let websocket = new SockJS(`${serverUrl}/websocket`);
       this.socketClient = Stomp.over(websocket);
       const subUrl = `/user/${this.keycloakService.keycloak.tokenParsed?.sub}/chat`;
       this.socketClient.connect({'Authorization': 'Bearer ' + this.keycloakService.keycloak.token},
