@@ -62,6 +62,7 @@ The project utilizes AWS cloud infrastructure for scalable and secure deployment
 - **AWS IAM**: Secure access management
 
 ### Deployment Highlights
+- Infrastructure-as-Code using **Pulumi**
 - Containerized application using Docker Compose
 - HTTPS enabled for all services
 - Automated infrastructure provisioning
@@ -98,3 +99,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Thanks to [@ali-bouali](https://github.com/ali-bouali) for an amazing guide! Please keep up your great work sir.
 - Spring Boot and Angular communities for their excellent documentation
 - Keycloak for providing robust authentication and authorization
+- Pulumi for one of the clearest documentations I've ever used!
