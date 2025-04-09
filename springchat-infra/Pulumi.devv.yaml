@@ -1,0 +1,7 @@
+config:
+  aws:region: us-east-1
+  springChat:dbUsername: username
+  springChat:dbPassword: password
+  springChat:environment: dev
+  springChat:projectName: springchat
+  springChat:keyPairName: springchat-key

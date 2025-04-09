@@ -82,7 +82,7 @@ const ec2SecurityGroup = new aws.ec2.SecurityGroup(`${projectName}-ec2-sg`, {
             protocol: "tcp",
             fromPort: 22,
             toPort: 22,
-            cidrBlocks: ["0.0.0.0/0"], // In production, restrict this to your IP
+            cidrBlocks: ["0.0.0.0/0"], // In prosction, restrict this to your IP
         },
         // Spring Boot app
         {
@@ -131,7 +131,7 @@ const rdsSecurityGroup = new aws.ec2.SecurityGroup(`${projectName}-rds-sg`, {
 });
 
 // Create DB subnet group
-const dbSubnetGroup = new aws.rds.SubnetGroup(`${projectName}-db-subnet-group`, {
+const dbSubnetGroup = new aws.rds.SubnetGroup(`${projectName.toLowerCase()}-db-subnet-group`, {
     subnetIds: [publicSubnet1.id, publicSubnet2.id],
     tags: {
         Name: `${projectName}-db-subnet-group-${environment}`,
@@ -176,7 +176,7 @@ const ec2Instance = new aws.ec2.Instance(`${projectName}-ec2`, {
     subnetId: publicSubnet1.id,
     vpcSecurityGroupIds: [ec2SecurityGroup.id],
     associatePublicIpAddress: true,
-    keyName: "your-key-pair", // Replace with your SSH key pair name
+    keyName: "springChat-key-pair",
     userData: pulumi.all([rdsInstance.endpoint, dbUsername, dbPassword]).apply(([endpoint, username, password]) => 
     `#!/bin/bash
 # Install Docker and Docker Compose
@@ -222,7 +222,7 @@ docker-compose up -d
 
 // Create S3 bucket for frontend
 const frontendBucket = new aws.s3.Bucket(`${projectName}-frontend`, {
-    acl: "public-read", // Make the bucket public for website hosting
+    // acl: aws.s3.CannedAcl.PublicRead, // Make the bucket public for website hosting
     website: {
         indexDocument: "index.html",
         errorDocument: "index.html",
@@ -238,6 +238,22 @@ const frontendBucket = new aws.s3.Bucket(`${projectName}-frontend`, {
         Name: `${projectName}-frontend-${environment}`,
     },
 });
+
+const frontendBucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock(`${projectName}-frontend-public-access`, {
+    bucket: frontendBucket.id,
+    blockPublicAcls: false,
+    blockPublicPolicy: false,
+    ignorePublicAcls: false,
+    restrictPublicBuckets: false,
+});
+
+//Bucket ownershup control for frontend bucket
+const frontendBucketOwnershipControls = new aws.s3.BucketOwnershipControls(`${projectName}-frontend-ownership`, {
+    bucket: frontendBucket.id,
+    rule: {
+        objectOwnership: "ObjectWriter", 
+    }
+})
 
 // Create S3 bucket for file uploads
 const uploadsBucket = new aws.s3.Bucket(`${projectName}-uploads`, {
@@ -357,13 +373,15 @@ const frontendBucketPolicy = new aws.s3.BucketPolicy(`${projectName}-frontend-po
             Resource: [`${arn}/*`],
         }],
     })),
-});
+}, { dependsOn: [frontendBucketPublicAccessBlock] });
 
 // Exports
 export const instancePublicIp = ec2Instance.publicIp;
 export const rdsEndpoint = rdsInstance.endpoint;
 export const frontendBucketWebsite = frontendBucket.websiteEndpoint;
+export const frontendBucketName = frontendBucket.bucket;
 export const cloudfrontDomain = frontendDistribution.domainName;
 export const uploadsBucketName = uploadsBucket.bucket;
 export const s3AccessKeyId = s3AccessKey.id;
 export const s3SecretAccessKey = s3AccessKey.secret;
+export const cloudfrontId = frontendDistribution.id;
