@@ -44,11 +44,28 @@ SpringChat is a full-stack web application that demonstrates how to build a real
 - MySQL 8.x
 - Docker
 
-### Installation
-
 
 ## Project Structure
+### AWS Deployment Architecture
+The project utilizes AWS cloud infrastructure for scalable and secure deployment:
+- **Compute**: EC2 instance running Docker containers for backend and Keycloak
+- **Database**: RDS MySQL for persistent data storage
+- **Frontend**: S3 static website hosting with CloudFront CDN
+- **Authentication**: Keycloak deployed on the same EC2 instance
+- **Infrastructure as Code**: Managed using Pulumi for reproducible deployments
 
+### AWS Services Utilized
+- **Amazon EC2**: Hosts Spring Boot backend and Keycloak
+- **Amazon RDS**: Managed MySQL database
+- **Amazon S3**: Frontend static website hosting
+- **Amazon CloudFront**: Content delivery network for frontend
+- **AWS IAM**: Secure access management
+
+### Deployment Highlights
+- Containerized application using Docker Compose
+- HTTPS enabled for all services
+- Automated infrastructure provisioning
+- Secure network configuration with VPC and security groups
 
 ## Security
 
