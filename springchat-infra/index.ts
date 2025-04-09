@@ -98,6 +98,20 @@ const ec2SecurityGroup = new aws.ec2.SecurityGroup(`${projectName}-ec2-sg`, {
             toPort: 9090,
             cidrBlocks: ["0.0.0.0/0"],
         },
+         // WebSocket (regular)
+         {
+            protocol: "tcp",
+            fromPort: 8080,
+            toPort: 8080,
+            cidrBlocks: ["0.0.0.0/0"],
+        },
+        // WebSocket (secure)
+        {
+            protocol: "tcp",
+            fromPort: 8443,
+            toPort: 8443, 
+            cidrBlocks: ["0.0.0.0/0"],
+        },
     ],
     egress: [
         {
@@ -179,18 +193,19 @@ const ec2Instance = new aws.ec2.Instance(`${projectName}-ec2`, {
     keyName: "springChat-key-pair",
     userData: pulumi.all([rdsInstance.endpoint, dbUsername, dbPassword]).apply(([endpoint, username, password]) => 
     `#!/bin/bash
-# Install Docker and Docker Compose
-amazon-linux-extras install docker -y
-systemctl start docker
-systemctl enable docker
-usermod -aG docker ec2-user
-curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+    # Install Docker and Docker Compose
+    amazon-linux-extras install docker -y
+    systemctl start docker
+    systemctl enable docker
+    usermod -aG docker ec2-user
+    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
 
-# Create docker-compose.yml
-mkdir -p /home/ec2-user/app
-cat > /home/ec2-user/app/docker-compose.yml << 'EOL'
-version: '3'
+    # Create docker-compose.yml
+    mkdir -p /home/ec2-user/app
+    cat > /home/ec2-user/app/docker-compose.yml << 'EOL'
+    version: '3'
+
 services:
   keycloak:
     container_name: keycloak-springChat
@@ -201,20 +216,54 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: mysql
-      KC_DB_URL: jdbc:mysql://${endpoint}/keycloak
-      KC_DB_USERNAME: ${username}
-      KC_DB_PASSWORD: ${password}
+      KC_DB_URL: jdbc:mysql://\${DB_ENDPOINT}/keycloak
+      KC_DB_USERNAME: \${DB_USERNAME}
+      KC_DB_PASSWORD: \${DB_PASSWORD}
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/cert.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/key.pem
+      KC_HOSTNAME_URL: https://\${EC2_IP}:9090
+    volumes:
+      - ./certs:/opt/keycloak/conf
     command:
       - "start-dev"
-EOL
+    restart: unless-stopped
+    networks:
+      - springchat-network
 
-# Set permissions
-chown -R ec2-user:ec2-user /home/ec2-user/app
+  springchat-backend:
+    container_name: springchat-backend
+    image: your-dockerhub/springchat-backend:latest
+    ports:
+      - 8080:8080  # HTTP port for health checks
+      - 8443:8443  # HTTPS port for secure connections
+    environment:
+      SPRING_PROFILES_ACTIVE: aws
+      RDS_ENDPOINT: \${DB_ENDPOINT}
+      DB_USERNAME: \${DB_USERNAME}
+      DB_PASSWORD: \${DB_PASSWORD}
+      EC2_IP: \${EC2_IP}
+      SSL_KEYSTORE_PASSWORD: \${SSL_KEYSTORE_PASSWORD}
+    volumes:
+      - ./certs:/app/certs
+      - ./uploads:/app/uploads
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+    networks:
+      - springchat-network
 
-# Start the containers
-cd /home/ec2-user/app
-docker-compose up -d
-`),
+networks:
+  springchat-network:
+    driver: bridge
+    EOL
+
+    # Set permissions
+    chown -R ec2-user:ec2-user /home/ec2-user/app
+
+    # Start the containers
+    cd /home/ec2-user/app
+    docker-compose up -d
+    `),
     tags: {
         Name: `${projectName}-ec2-${environment}`,
     },
