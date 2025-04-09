@@ -51,7 +51,7 @@ The project utilizes AWS cloud infrastructure for scalable and secure deployment
 - **Compute**: EC2 instance running Docker containers for backend and Keycloak
 - **Database**: RDS MySQL for persistent data storage
 - **Frontend**: S3 static website hosting with CloudFront CDN
-- **Authentication**: Keycloak deployed on the same EC2 instance
+- **Authentication**: Keycloak deployed on Docker on the same EC2 instance
 - **Infrastructure as Code**: Managed using Pulumi for reproducible deployments
 
 ### AWS Services Utilized
